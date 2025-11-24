@@ -13,5 +13,5 @@ def user_to_dict(user):
         "manager_id": user.manager_id,
         "hire_date": user.hire_date,
         "birth_date": user.birth_date,
-        "address": user.address
+        "address": user.address,
     }

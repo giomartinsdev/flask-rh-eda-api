@@ -2,15 +2,17 @@ import sqlite3
 from contextlib import contextmanager
 import os
 
-DATABASE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'users.db')
+DATABASE_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "users.db")
+
 
 def init_db():
     """Inicializa o banco de dados e cria as tabelas se não existirem"""
     conn = sqlite3.connect(DATABASE_PATH)
     cursor = conn.cursor()
-    
+
     # Tabela de users
-    cursor.execute('''
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
@@ -27,10 +29,12 @@ def init_db():
             address TEXT,
             FOREIGN KEY (manager_id) REFERENCES users(id)
         )
-    ''')
-    
+    """
+    )
+
     # Tabela de eventos (eventstore)
-    cursor.execute('''
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             event_type TEXT NOT NULL,
@@ -39,14 +43,18 @@ def init_db():
             occurred_at TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
-    ''')
-    cursor.execute('''
+    """
+    )
+    cursor.execute(
+        """
         CREATE INDEX IF NOT EXISTS idx_events_aggregate 
         ON events(aggregate_id, event_type)
-    ''')
-    
+    """
+    )
+
     conn.commit()
     conn.close()
+
 
 @contextmanager
 def get_db_connection():

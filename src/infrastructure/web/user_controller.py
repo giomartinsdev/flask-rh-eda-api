@@ -5,18 +5,25 @@ from infrastructure.db.sqlite_user_repository import SqliteUserRepository
 from infrastructure.db.database import init_db
 from infrastructure.db.event_store import EventStore
 from domain.user import User
-from infrastructure.web.swagger_mapper import generate_swagger_model_from_class, generate_response_model_from_class
+from infrastructure.web.swagger_mapper import (
+    generate_swagger_model_from_class,
+    generate_response_model_from_class,
+)
 from infrastructure.web.serializers import user_to_dict
 from infrastructure.event_bus import get_event_bus
 from application.event_handlers import (
-    LogEventHandler, PositionChangeNotificationHandler, 
-    SalaryChangeAuditHandler, DepartmentChangeHandler,
-    UserActivationHandler, PositionChangeHandler, QueryAuditHandler
+    LogEventHandler,
+    PositionChangeNotificationHandler,
+    SalaryChangeAuditHandler,
+    DepartmentChangeHandler,
+    UserActivationHandler,
+    PositionChangeHandler,
+    QueryAuditHandler,
 )
 from domain.enums import Position
 from domain.events import EventType
 
-ns_user = Namespace('user', description='Operações relacionadas a usuários')
+ns_user = Namespace("user", description="Operações relacionadas a usuários")
 
 init_db()
 
@@ -47,14 +54,19 @@ user_repository = SqliteUserRepository()
 event_store = EventStore()
 user_service = UserService(user_repository, event_store)
 
-user_input_model = ns_user.model('UserInput', generate_swagger_model_from_class(User, exclude_fields=['id']))
-user_response_model = ns_user.model('UserResponse', generate_response_model_from_class(User))
+user_input_model = ns_user.model(
+    "UserInput", generate_swagger_model_from_class(User, exclude_fields=["id"])
+)
+user_response_model = ns_user.model(
+    "UserResponse", generate_response_model_from_class(User)
+)
 
-@ns_user.route('/')
+
+@ns_user.route("/")
 class UsersResource(Resource):
-    @ns_user.doc('get_all_users')
-    @ns_user.response(200, 'Sucesso', [user_response_model])
-    @ns_user.response(500, 'Erro interno')
+    @ns_user.doc("get_all_users")
+    @ns_user.response(200, "Sucesso", [user_response_model])
+    @ns_user.response(500, "Erro interno")
     def get(self):
         """Obtém a lista de users"""
         try:
@@ -62,12 +74,12 @@ class UsersResource(Resource):
             return [user_to_dict(u) for u in users], 200
         except Exception as e:
             ns_user.abort(500, "Erro ao listar usuários")
-    
-    @ns_user.doc('create_user')
+
+    @ns_user.doc("create_user")
     @ns_user.expect(user_input_model)
-    @ns_user.response(201, 'Usuário criado com sucesso', user_response_model)
-    @ns_user.response(400, 'Dados inválidos')
-    @ns_user.response(500, 'Erro interno')
+    @ns_user.response(201, "Usuário criado com sucesso", user_response_model)
+    @ns_user.response(400, "Dados inválidos")
+    @ns_user.response(500, "Erro interno")
     def post(self):
         """Cria um novo usuário"""
         try:
@@ -79,12 +91,13 @@ class UsersResource(Resource):
         except Exception as e:
             ns_user.abort(500, "Erro ao criar usuário")
 
-@ns_user.route('/<int:user_id>')
+
+@ns_user.route("/<int:user_id>")
 class UserResource(Resource):
-    @ns_user.doc('get_user')
-    @ns_user.response(200, 'Sucesso', user_response_model)
-    @ns_user.response(404, 'Usuário não encontrado')
-    @ns_user.response(500, 'Erro interno')
+    @ns_user.doc("get_user")
+    @ns_user.response(200, "Sucesso", user_response_model)
+    @ns_user.response(404, "Usuário não encontrado")
+    @ns_user.response(500, "Erro interno")
     def get(self, user_id):
         """Obtém um usuário específico por ID"""
         try:
@@ -94,13 +107,13 @@ class UserResource(Resource):
             ns_user.abort(404, "Usuário não encontrado")
         except Exception as e:
             ns_user.abort(500, "Erro ao buscar usuário")
-    
-    @ns_user.doc('update_user')
+
+    @ns_user.doc("update_user")
     @ns_user.expect(user_input_model)
-    @ns_user.response(200, 'Usuário atualizado com sucesso', user_response_model)
-    @ns_user.response(400, 'Dados inválidos')
-    @ns_user.response(404, 'Usuário não encontrado')
-    @ns_user.response(500, 'Erro interno')
+    @ns_user.response(200, "Usuário atualizado com sucesso", user_response_model)
+    @ns_user.response(400, "Dados inválidos")
+    @ns_user.response(404, "Usuário não encontrado")
+    @ns_user.response(500, "Erro interno")
     def put(self, user_id):
         """Atualiza um usuário existente"""
         try:
@@ -113,11 +126,11 @@ class UserResource(Resource):
             ns_user.abort(400, str(e))
         except Exception as e:
             ns_user.abort(500, "Erro ao atualizar usuário")
-    
-    @ns_user.doc('delete_user')
-    @ns_user.response(200, 'Usuário deletado com sucesso')
-    @ns_user.response(404, 'Usuário não encontrado')
-    @ns_user.response(500, 'Erro interno')
+
+    @ns_user.doc("delete_user")
+    @ns_user.response(200, "Usuário deletado com sucesso")
+    @ns_user.response(404, "Usuário não encontrado")
+    @ns_user.response(500, "Erro interno")
     def delete(self, user_id):
         """Deleta um usuário"""
         try:
@@ -128,10 +141,11 @@ class UserResource(Resource):
         except Exception as e:
             ns_user.abort(500, "Erro ao deletar usuário")
 
-@ns_user.route('/<int:user_id>/events')
+
+@ns_user.route("/<int:user_id>/events")
 class UserEventsResource(Resource):
-    @ns_user.doc('get_user_events')
-    @ns_user.response(200, 'Histórico de eventos do usuário')
+    @ns_user.doc("get_user_events")
+    @ns_user.response(200, "Histórico de eventos do usuário")
     def get(self, user_id):
         """Obtém o histórico de eventos de um usuário"""
         try:
@@ -140,27 +154,40 @@ class UserEventsResource(Resource):
         except Exception as e:
             ns_user.abort(500, "Erro ao buscar eventos")
 
-@ns_user.route('/<int:user_id>/change-position')
+
+@ns_user.route("/<int:user_id>/change-position")
 class UserPositionChangeResource(Resource):
-    @ns_user.doc('change_position')
-    @ns_user.expect(ns_user.model('PositionChange', {
-        'new_position': fields.String(required=True, description='Nova posição', 
-                                      enum=[pos.value for pos in Position]),
-        'new_salary': fields.Float(required=True, description='Novo salário'),
-        'changed_by': fields.Integer(description='ID do usuário que está fazendo a mudança de posição')
-    }))
-    @ns_user.response(200, 'Posição alterada com sucesso', user_response_model)
-    @ns_user.response(404, 'Usuário não encontrado')
-    @ns_user.response(400, 'Dados inválidos')
+    @ns_user.doc("change_position")
+    @ns_user.expect(
+        ns_user.model(
+            "PositionChange",
+            {
+                "new_position": fields.String(
+                    required=True,
+                    description="Nova posição",
+                    enum=[pos.value for pos in Position],
+                ),
+                "new_salary": fields.Float(required=True, description="Novo salário"),
+                "changed_by": fields.Integer(
+                    description="ID do usuário que está fazendo a mudança de posição"
+                ),
+            },
+        )
+    )
+    @ns_user.response(200, "Posição alterada com sucesso", user_response_model)
+    @ns_user.response(404, "Usuário não encontrado")
+    @ns_user.response(400, "Dados inválidos")
     def post(self, user_id):
         """Altera a posição de um funcionário (promoção, demoção ou mudança lateral)"""
         try:
             data = request.json
-            new_position = data.get('new_position')
-            new_salary = data.get('new_salary')
-            changed_by = data.get('changed_by')
-            
-            user = user_service.change_position(user_id, new_position, new_salary, changed_by)
+            new_position = data.get("new_position")
+            new_salary = data.get("new_salary")
+            changed_by = data.get("changed_by")
+
+            user = user_service.change_position(
+                user_id, new_position, new_salary, changed_by
+            )
             if user:
                 return user_to_dict(user), 200
             ns_user.abort(404, "Usuário não encontrado")

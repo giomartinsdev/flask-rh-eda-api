@@ -1,7 +1,9 @@
 from enum import Enum
 
+
 class Department(str, Enum):
     """Departamentos disponíveis na empresa"""
+
     ENGINEERING = "engineering"
     SALES = "sales"
     MARKETING = "marketing"
@@ -11,8 +13,10 @@ class Department(str, Enum):
     IT = "it"
     CUSTOMER_SUPPORT = "customer_support"
 
+
 class Position(str, Enum):
     """Cargos disponíveis na empresa"""
+
     INTERN = "intern"
     JUNIOR = "junior"
     PLENO = "pleno"
@@ -24,8 +28,10 @@ class Position(str, Enum):
     CTO = "cto"
     CEO = "ceo"
 
+
 class EmploymentType(str, Enum):
     """Tipos de contratação"""
+
     FULL_TIME = "full_time"
     PART_TIME = "part_time"
     CONTRACT = "contract"
