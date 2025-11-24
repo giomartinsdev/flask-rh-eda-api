@@ -6,7 +6,7 @@ from typing import Optional, List
 
 class SqliteUserRepository(UserRepository):
     def get_user_by_id(self, user_id: int) -> Optional[User]:
-        """Busca um usuário pelo ID"""
+        """Fetch a user by ID"""
         with get_db_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
@@ -38,7 +38,7 @@ class SqliteUserRepository(UserRepository):
             return None
 
     def create_user(self, user: User) -> User:
-        """Cria um novo usuário no banco de dados"""
+        """Create a new user in the database"""
         with get_db_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
@@ -66,7 +66,7 @@ class SqliteUserRepository(UserRepository):
             return user
 
     def get_all_users(self) -> List[User]:
-        """Retorna todos os usuários"""
+        """Return all users"""
         with get_db_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
@@ -99,7 +99,7 @@ class SqliteUserRepository(UserRepository):
             return users
 
     def update_user(self, user_id: int, user: User) -> Optional[User]:
-        """Atualiza um usuário existente"""
+        """Update an existing user"""
         with get_db_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
@@ -132,7 +132,7 @@ class SqliteUserRepository(UserRepository):
             return None
 
     def delete_user(self, user_id: int) -> bool:
-        """Deleta um usuário pelo ID"""
+        """Delete a user by ID"""
         with get_db_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(

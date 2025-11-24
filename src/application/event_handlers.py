@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 
 class EventHandler(ABC):
-    """Handler base para eventos"""
+    """Base handler for events"""
 
     @abstractmethod
     def handle(self, event: DomainEvent):
@@ -11,7 +11,7 @@ class EventHandler(ABC):
 
 
 class LogEventHandler(EventHandler):
-    """Handler que loga todos os eventos"""
+    """Handler that logs all events"""
 
     def handle(self, event: DomainEvent):
         print(f"[EVENT LOG] {event.event_type.value} - User ID: {event.aggregate_id}")
@@ -20,7 +20,7 @@ class LogEventHandler(EventHandler):
 
 
 class PositionChangeNotificationHandler(EventHandler):
-    """Handler que notifica quando há mudança de posição"""
+    """Handler that notifies when there is a position change"""
 
     def handle(self, event: DomainEvent):
         old_pos = event.data.get("old_position")
@@ -31,7 +31,7 @@ class PositionChangeNotificationHandler(EventHandler):
 
 
 class SalaryChangeAuditHandler(EventHandler):
-    """Handler que audita mudanças de salário"""
+    """Handler that audits salary changes"""
 
     def handle(self, event: DomainEvent):
         old_salary = event.data.get("old_salary")
@@ -43,7 +43,7 @@ class SalaryChangeAuditHandler(EventHandler):
 
 
 class DepartmentChangeHandler(EventHandler):
-    """Handler que processa mudanças de departamento"""
+    """Handler that processes department changes"""
 
     def handle(self, event: DomainEvent):
         old_dept = event.data.get("old_department")
@@ -54,7 +54,7 @@ class DepartmentChangeHandler(EventHandler):
 
 
 class UserActivationHandler(EventHandler):
-    """Handler que processa ativações e desativações de usuários"""
+    """Handler that processes user activations and deactivations"""
 
     def handle(self, event: DomainEvent):
         action = (
@@ -66,7 +66,7 @@ class UserActivationHandler(EventHandler):
 
 
 class PositionChangeHandler(EventHandler):
-    """Handler que processa mudanças de posição de usuários (promoções, demoções, mudanças laterais)"""
+    """Handler that processes user position changes (promotions, demotions, lateral moves)"""
 
     def handle(self, event: DomainEvent):
         old_pos = event.data.get("old_position")
@@ -77,9 +77,9 @@ class PositionChangeHandler(EventHandler):
         change_type = "lateral"
         if new_salary and old_salary:
             if new_salary > old_salary:
-                change_type = "promoção"
+                change_type = "promotion"
             elif new_salary < old_salary:
-                change_type = "demoção"
+                change_type = "demotion"
 
         print(f"[POSITION CHANGE] User {event.aggregate_id} - {change_type}")
         print(f"                  Position: {old_pos} → {new_pos}")
@@ -88,7 +88,7 @@ class PositionChangeHandler(EventHandler):
 
 
 class QueryAuditHandler(EventHandler):
-    """Handler que audita consultas de usuários"""
+    """Handler that audits user queries"""
 
     def handle(self, event: DomainEvent):
         queried_by = event.data.get("queried_by", "unknown")

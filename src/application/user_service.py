@@ -34,7 +34,7 @@ class UserService:
         self.event_store = event_store or EventStore()
 
     def get_user(self, user_id: int, queried_by: int = None) -> Optional[User]:
-        """Busca um usuário e publica evento de consulta"""
+        """Fetch a user and publish query event"""
         user = self.user_repository.get_user_by_id(user_id)
 
         if user:
@@ -55,7 +55,7 @@ class UserService:
         return created_user
 
     def get_all_users(self, filters: dict = None, queried_by: int = None) -> List[User]:
-        """Busca todos os usuários e publica evento de consulta"""
+        """Fetch all users and publish query event"""
         users = self.user_repository.get_all_users()
 
         event = UserListQueriedEvent(filters, queried_by)
@@ -67,7 +67,7 @@ class UserService:
     def update_user(
         self, user_id: int, user_data: dict, changed_by: int = None
     ) -> Optional[User]:
-        """Atualiza usuário e publica eventos para cada mudança detectada"""
+        """Update user and publish events for each detected change"""
         current_user = self.user_repository.get_user_by_id(user_id)
         if not current_user:
             return None
@@ -135,7 +135,7 @@ class UserService:
         return deleted
 
     def get_user_events(self, user_id: int, queried_by: int = None):
-        """Retorna histórico de eventos de um usuário"""
+        """Return event history for a user"""
         event = UserEventsQueriedEvent(user_id, queried_by)
         self.event_store.save_event(event)
         self.event_bus.publish(event)
@@ -145,7 +145,7 @@ class UserService:
     def change_position(
         self, user_id: int, new_position: str, new_salary: float, changed_by: int = None
     ) -> Optional[User]:
-        """Altera a posição de um usuário (pode ser promoção, demoção ou mudança lateral)"""
+        """Change a user's position (can be promotion, demotion, or lateral move)"""
         current_user = self.user_repository.get_user_by_id(user_id)
         if not current_user:
             return None

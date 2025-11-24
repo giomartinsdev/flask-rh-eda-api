@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 
 class EventType(str, Enum):
-    """Tipos de eventos do sistema"""
+    """System event types"""
 
     # user lifecycle events
     USER_CREATED = "user.created"
@@ -37,7 +37,7 @@ class EventType(str, Enum):
 
 
 class DomainEvent:
-    """Evento de domínio base"""
+    """Base domain event"""
 
     def __init__(self, event_type: EventType, aggregate_id: int, data: Dict[str, Any]):
         self.event_type = event_type
@@ -57,28 +57,28 @@ class DomainEvent:
 
 
 class UserCreatedEvent(DomainEvent):
-    """Evento disparado quando um usuário é criado"""
+    """Event fired when a user is created"""
 
     def __init__(self, user_id: int, user_data: Dict[str, Any]):
         super().__init__(EventType.USER_CREATED, user_id, user_data)
 
 
 class UserUpdatedEvent(DomainEvent):
-    """Evento disparado quando um usuário é atualizado"""
+    """Event fired when a user is updated"""
 
     def __init__(self, user_id: int, changes: Dict[str, Any]):
         super().__init__(EventType.USER_UPDATED, user_id, changes)
 
 
 class UserDeletedEvent(DomainEvent):
-    """Evento disparado quando um usuário é deletado"""
+    """Event fired when a user is deleted"""
 
     def __init__(self, user_id: int):
         super().__init__(EventType.USER_DELETED, user_id, {})
 
 
 class PositionChangedEvent(DomainEvent):
-    """Evento disparado quando a posição de um usuário muda"""
+    """Event fired when a user's position changes"""
 
     def __init__(
         self, user_id: int, old_position: str, new_position: str, changed_by: int = None
@@ -95,7 +95,7 @@ class PositionChangedEvent(DomainEvent):
 
 
 class SalaryChangedEvent(DomainEvent):
-    """Evento disparado quando o salário de um usuário muda"""
+    """Event fired when a user's salary changes"""
 
     def __init__(
         self, user_id: int, old_salary: float, new_salary: float, changed_by: int = None
@@ -112,7 +112,7 @@ class SalaryChangedEvent(DomainEvent):
 
 
 class DepartmentChangedEvent(DomainEvent):
-    """Evento disparado quando o departamento de um usuário muda"""
+    """Event fired when a user's department changes"""
 
     def __init__(
         self,
@@ -133,7 +133,7 @@ class DepartmentChangedEvent(DomainEvent):
 
 
 class ManagerChangedEvent(DomainEvent):
-    """Evento disparado quando o gerente de um usuário muda"""
+    """Event fired when a user's manager changes"""
 
     def __init__(
         self,
@@ -154,7 +154,7 @@ class ManagerChangedEvent(DomainEvent):
 
 
 class EmploymentTypeChangedEvent(DomainEvent):
-    """Evento disparado quando o tipo de contratação muda"""
+    """Event fired when employment type changes"""
 
     def __init__(
         self, user_id: int, old_type: str, new_type: str, changed_by: int = None
@@ -171,7 +171,7 @@ class EmploymentTypeChangedEvent(DomainEvent):
 
 
 class UserActivatedEvent(DomainEvent):
-    """Evento disparado quando um usuário é ativado"""
+    """Event fired when a user is activated"""
 
     def __init__(self, user_id: int, activated_by: int = None):
         super().__init__(
@@ -180,7 +180,7 @@ class UserActivatedEvent(DomainEvent):
 
 
 class UserDeactivatedEvent(DomainEvent):
-    """Evento disparado quando um usuário é desativado"""
+    """Event fired when a user is deactivated"""
 
     def __init__(self, user_id: int, deactivated_by: int = None):
         super().__init__(
@@ -189,7 +189,7 @@ class UserDeactivatedEvent(DomainEvent):
 
 
 class UserNameChangedEvent(DomainEvent):
-    """Evento disparado quando o nome muda"""
+    """Event fired when name changes"""
 
     def __init__(self, user_id: int, old_name: str, new_name: str):
         super().__init__(
@@ -200,7 +200,7 @@ class UserNameChangedEvent(DomainEvent):
 
 
 class UserEmailChangedEvent(DomainEvent):
-    """Evento disparado quando o email muda"""
+    """Event fired when email changes"""
 
     def __init__(self, user_id: int, old_email: str, new_email: str):
         super().__init__(
@@ -211,7 +211,7 @@ class UserEmailChangedEvent(DomainEvent):
 
 
 class UserPhoneChangedEvent(DomainEvent):
-    """Evento disparado quando o telefone muda"""
+    """Event fired when phone changes"""
 
     def __init__(self, user_id: int, old_phone: str, new_phone: str):
         super().__init__(
@@ -222,7 +222,7 @@ class UserPhoneChangedEvent(DomainEvent):
 
 
 class UserAddressChangedEvent(DomainEvent):
-    """Evento disparado quando o endereço muda"""
+    """Event fired when address changes"""
 
     def __init__(self, user_id: int, old_address: str, new_address: str):
         super().__init__(
@@ -233,7 +233,7 @@ class UserAddressChangedEvent(DomainEvent):
 
 
 class UserHiredEvent(DomainEvent):
-    """Evento disparado quando um usuário é contratado"""
+    """Event fired when a user is hired"""
 
     def __init__(
         self,
@@ -256,7 +256,7 @@ class UserHiredEvent(DomainEvent):
 
 
 class UserPromotedEvent(DomainEvent):
-    """Evento disparado quando um usuário é promovido"""
+    """Event fired when a user is promoted"""
 
     def __init__(
         self,
@@ -279,7 +279,7 @@ class UserPromotedEvent(DomainEvent):
 
 
 class UserDemotedEvent(DomainEvent):
-    """Evento disparado quando um usuário é rebaixado"""
+    """Event fired when a user is demoted"""
 
     def __init__(
         self,
@@ -302,14 +302,14 @@ class UserDemotedEvent(DomainEvent):
 
 
 class UserQueriedEvent(DomainEvent):
-    """Evento disparado quando um usuário é consultado"""
+    """Event fired when a user is queried"""
 
     def __init__(self, user_id: int, queried_by: int = None):
         super().__init__(EventType.USER_QUERIED, user_id, {"queried_by": queried_by})
 
 
 class UserListQueriedEvent(DomainEvent):
-    """Evento disparado quando a lista de usuários é consultada"""
+    """Event fired when the user list is queried"""
 
     def __init__(self, filters: Dict[str, Any] = None, queried_by: int = None):
         super().__init__(
@@ -320,7 +320,7 @@ class UserListQueriedEvent(DomainEvent):
 
 
 class UserEventsQueriedEvent(DomainEvent):
-    """Evento disparado quando os eventos de um usuário são consultados"""
+    """Event fired when a user's events are queried"""
 
     def __init__(self, user_id: int, queried_by: int = None):
         super().__init__(
